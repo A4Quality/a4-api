@@ -399,7 +399,7 @@ class RN440DAO
         $id = $res[count($res) - 1];
 
         $acc_rn440 = new RN440();
-        $acc_rn440->setId($id);
+        $acc_rn440->setId($id->id);
 
         if ($returnOnlyId) return $id->id;
 
