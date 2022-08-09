@@ -137,6 +137,7 @@ class EvaluationDAO
             $objAcc->setMonth($resume->getMonth());
             $objAcc->setYear($resume->getYear());
             $objAcc->setCustomText($resume->getCustomText());
+            $objAcc->setCustomTextFit($resume->getCustomTextFit());
             $objAcc->setIsFit($resume->getIsFit());
             $objAcc->setIsRemote($resume->getIsRemote());
             $objAcc->setLevel($resume->getLevel());

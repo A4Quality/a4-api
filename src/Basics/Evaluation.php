@@ -221,7 +221,7 @@ class Evaluation
             "analysisUser" => $this->analysisUser,
             "type" => $this->type,
             "createdDate" => $this->createdDate->format('d/m/Y - H:i:s'),
-            "createdDateTimestamp" => $this->createdDate->format('U'),
+            "createdDateTimestamp" => $this->createdDate->format('U') . "000",
             "reportStartDate" => $this->reportStartDate ? $this->reportStartDate->format('d/m/Y') : null,
             "reportEndDate" => $this->reportEndDate ? $this->reportEndDate->format('d/m/Y') : null,
             "reportStartDateInput" => $this->reportStartDate ? $this->reportStartDate->format('Y-m-d') : null,

@@ -418,6 +418,35 @@ class RN440DAO
         return $super;
     }
 
+    public function reportIdLastEvaluation(RN440 $rn440, $type) {
+
+        $evaluation =  $rn440->getEvaluation();
+        $lastDay = $evaluation->getCreatedDate()->format("Y-m-d H:i:s");
+        $firstDay = date("Y-m-d H:i:s", strtotime($lastDay . ' -1 year'));
+
+        $conn = Database::conexao();
+        $sql = "SELECT rn.id as id from evaluations ev
+                            INNER JOIN rn_440 rn
+                            ON ev.id = rn.id_evaluation
+                            where ev.createdDate BETWEEN 
+                            ('".$firstDay."') and
+                            ('".$lastDay."') and 
+                            rn.type = ".$type." and
+                            rn.id != ".$rn440->getId()." and
+                            ev.id_company = ".$evaluation->getCompany()->getId().";";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $res = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        $id = $res[count($res) - 1];
+
+        $acc_rn440 = new RN440();
+        $acc_rn440->setId($id->id);
+
+        return $id->id;
+    }
+
     public function reportSelfEvaluation(RN440 $rn440) {
         return $this->listRequirements($rn440, true);
     }

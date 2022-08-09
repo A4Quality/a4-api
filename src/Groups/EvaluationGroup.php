@@ -112,6 +112,7 @@ $app->group('/evaluation', function () {
         $resume->setYear(isset($data['year']) ? $data['year'] : null);
         $resume->setCustomText(isset($data['customText']) ? $data['customText'] : null);
         $resume->setIsFit(isset($data['isFit']) ? $data['isFit'] : null);
+        $resume->setCustomTextFit(isset($data['customTextFit']) ? $data['customTextFit'] : null);
         $resume->setIsRemote(isset($data['isRemote']) ? $data['isRemote'] : null);
         $resume->setLevel(isset($data['level']) ? $data['level'] : null);
 

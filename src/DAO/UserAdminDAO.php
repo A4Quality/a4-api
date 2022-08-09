@@ -156,7 +156,7 @@ class UserAdminDAO
 
             $obj = $entityManager->find(Account::class, $account->getId());
 
-            $obj->setAtivo($account->getActive());
+            $obj->setActive($account->getActive());
 
             $entityManager->flush();
 

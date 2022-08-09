@@ -86,21 +86,35 @@ class RN440Controller
 
         $RN440DAO = new RN440DAO();
         $result = $RN440DAO->listRequirements($RN440);
-        if ($result['status'] === 200 && $result['type'] === RN440::TYPE_SUPERVISION) {
 
-            $evaluation = new Evaluation(Evaluation::TYPE_RN_440);
-            $evaluation->setCompany($result['company']);
-            $evaluation->setCreatedDate($result['createdDate']);
-            $RN440->setEvaluation($evaluation);
+        switch ($result['type']) {
+            case RN440::TYPE_SUPERVISION:
+                $typeChose= RN440::TYPE_CERTIFICATION;
+                break;
+            case RN440::TYPE_PRE:
+                $typeChose= RN440::TYPE_PRE;
+                break;
+            default:
+                $typeChose = $result['type'];
+        }
 
-            $lastRN440 = new RN440();
-            $lastRN440->setId($RN440DAO->reportSupervision($RN440, true));
-            $listRequirements = $RN440DAO->listRequirements($lastRN440);
-            $result['result']['lastEvaluation'] = $listRequirements['result'];
-            return $result;
-        } else {
+        $evaluation = new Evaluation(Evaluation::TYPE_RN_440);
+        $evaluation->setCompany($result['company']);
+        $evaluation->setCreatedDate($result['createdDate']);
+        $RN440->setEvaluation($evaluation);
+
+        $lastRN440 = new RN440();
+        $lastRN440->setId($RN440DAO->reportIdLastEvaluation($RN440, $typeChose));
+
+        if ($lastRN440->getId() === null) {
+            $result['result']['lastEvaluation'] = null;
             return $result;
         }
+
+        $listRequirements = $RN440DAO->listRequirements($lastRN440);
+        $result['result']['lastEvaluation'] = $listRequirements['result'];
+        return $result;
+
     }
 
     public function updateRequirementsItems(RN440RequirementsItems $RN440RequirementsItems, $groupId, $userId, $type)

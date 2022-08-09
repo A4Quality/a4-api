@@ -88,21 +88,36 @@ class RN452Controller
 
         $RN452DAO = new RN452DAO();
         $result = $RN452DAO->listRequirements($RN452);
-        if ($result['status'] === 200 && $result['type'] === RN452::TYPE_SUPERVISION) {
 
-            $evaluation = new Evaluation(Evaluation::TYPE_RN_452);
-            $evaluation->setCompany($result['company']);
-            $evaluation->setCreatedDate($result['createdDate']);
-            $RN452->setEvaluation($evaluation);
-
-            $lastRN452 = new RN452();
-            $lastRN452->setId($RN452DAO->reportSupervision($RN452, true));
-            $listRequirements = $RN452DAO->listRequirements($lastRN452);
-            $result['result']['lastEvaluation'] = $listRequirements['result'];
-            return $result;
-        } else {
-            return $RN452DAO->listRequirements($RN452);
+        switch ($result['type']) {
+            case RN452::TYPE_SUPERVISION:
+                $typeChose = RN452::TYPE_ACCREDITATION;
+                break;
+            case RN452::TYPE_ACCREDITATION:
+                $typeChose = RN452::TYPE_PRE;
+                break;
+            default:
+                $typeChose = $result['type'];
+                break;
         }
+
+        $evaluation = new Evaluation(Evaluation::TYPE_RN_452);
+        $evaluation->setCompany($result['company']);
+        $evaluation->setCreatedDate($result['createdDate']);
+        $RN452->setEvaluation($evaluation);
+
+        $lastRN452 = new RN452();
+        $lastRN452->setId($RN452DAO->reportIdLastEvaluation($RN452, $typeChose));
+
+        if ($lastRN452->getId() === null) {
+            $result['result']['lastEvaluation'] = null;
+            return $result;
+        }
+
+        $listRequirements = $RN452DAO->listRequirements($lastRN452);
+        $result['result']['lastEvaluation'] = $listRequirements['result'];
+        return $result;
+
     }
 
     public function updateMonitoredIndicators(RN452MonitoredIndicators $monitoredIndicators, $groupId, $userId)

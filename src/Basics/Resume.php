@@ -56,6 +56,11 @@ class Resume
      */
     private $customText;
 
+    /**
+     * @Column(type="text", nullable=true)
+     */
+    private $customTextFit;
+
 
     public function convertArray()
     {
@@ -69,6 +74,7 @@ class Resume
             "isRemote" => $this->isRemote,
             "level" => $this->level,
             "customText" => $this->customText,
+            "customTextFit" => $this->customTextFit,
         ];
     }
 
@@ -231,6 +237,24 @@ class Resume
     public function setCustomText($customText)
     {
         $this->customText = $customText;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomTextFit()
+    {
+        return $this->customTextFit;
+    }
+
+    /**
+     * @param mixed $customTextFit
+     * @return Resume
+     */
+    public function setCustomTextFit($customTextFit)
+    {
+        $this->customTextFit = $customTextFit;
         return $this;
     }
 }
