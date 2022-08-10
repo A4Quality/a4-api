@@ -278,6 +278,7 @@ $app->group('/evaluation', function () {
 
         $evaluation->setId(isset($data['evaluationId']) ? $data['evaluationId'] : null);
         $evaluation->setEvaluator(isset($data['evaluators']) ? $data['evaluators'] : null);
+        $evaluation->setEvaluatorObserver(isset($data['observerEvaluators']) ? $data['observerEvaluators'] : []);
         $evaluation->setLeaderApproval(isset($data['leader']) ? $data['leader'] : null);
 
         $evaluationController = new EvaluationController();

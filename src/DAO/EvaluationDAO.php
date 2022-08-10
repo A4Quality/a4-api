@@ -432,6 +432,11 @@ class EvaluationDAO
                 $this->entityManager->flush();
             }
 
+            foreach ($objAcc->getEvaluatorObserver() as $evaluatorAdmin){
+                $objAcc->removeEvaluatorObserver($evaluatorAdmin);
+                $this->entityManager->flush();
+            }
+
             $arrayEvaluators = $this->separatedEvaluatorsUsers($evaluation);
 
             foreach ($arrayEvaluators['evaluators'] as $evaluator){
@@ -442,6 +447,14 @@ class EvaluationDAO
             foreach ($arrayEvaluators['directors'] as $admin){
                 $obj = $this->entityManager->find(Admin::class, $admin);
                 $objAcc->addEvaluatorAdmin($obj);
+            }
+
+            $list = $evaluation->getEvaluatorObserver();
+            $listObserver = is_array($list) ? $list : [];
+
+            foreach ($listObserver as $evaluator){
+                $obj = $this->entityManager->find(Evaluator::class, $evaluator);
+                $objAcc->addEvaluatorObserver($obj);
             }
 
             $objAcc->setLeaderApproval($evaluation->getLeaderApproval());

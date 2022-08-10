@@ -48,6 +48,7 @@ $app->group('/rn-440', function () {
 
         $evaluation->setCompany(isset($data['company']) ? $data['company'] : null);
         $evaluation->setEvaluator(isset($data['evaluators']) ? $data['evaluators'] : null);
+        $evaluation->setEvaluatorObserver(isset($data['observerEvaluators']) ? $data['observerEvaluators'] : []);
         $evaluation->setAnalysisUser(isset($data['director']) ? $data['director'] : null);
         $evaluation->setLeaderApproval(isset($data['leader']) ? $data['leader'] : null);
 

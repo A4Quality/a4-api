@@ -599,6 +599,7 @@ class RN440DAO
             $RN440Array['evaluators'] = [];
             $RN440Array['evaluatorsAdmin'] = [];
             $RN440Array['evaluatorsCompany'] = [];
+            $RN440Array['evaluatorObserver'] = [];
 
             $evaluatorObj = $objEvaluation->getEvaluator();
             foreach ($evaluatorObj as $itemEvaluator) {
@@ -615,7 +616,16 @@ class RN440DAO
                 array_push($RN440Array['evaluatorsCompany'], $itemEvaluatorCompanyUser->convertArray());
             }
 
+            $evaluatorObserver = $objEvaluation->getEvaluatorObserver();
+            foreach ($evaluatorObserver as $itemEvaluator) {
+                array_push($RN440Array['evaluatorObserver'], $itemEvaluator->convertArray());
+            }
+
             usort($RN440Array['evaluators'], function($a, $b) {
+                return $a['name'] <=> $b['name'];
+            });
+
+            usort($RN440Array['evaluatorObserver'], function($a, $b) {
                 return $a['name'] <=> $b['name'];
             });
 
@@ -751,8 +761,12 @@ class RN440DAO
 
                 $arrayEvaluators = $EvaluationDAO->separatedEvaluatorsUsers($evaluation);
 
+                $list = $evaluation->getEvaluatorObserver();
+                $listObserver = is_array($list) ? $list : [];
+
                 $evaluation->setEvaluator(new \Doctrine\Common\Collections\ArrayCollection());
                 $evaluation->setEvaluatorAdmins(new \Doctrine\Common\Collections\ArrayCollection());
+                $evaluation->setEvaluatorObserver(new \Doctrine\Common\Collections\ArrayCollection());
 
                 foreach ($arrayEvaluators['evaluators'] as $evaluator){
                     $obj = $this->entityManager->find(Evaluator::class, $evaluator);
@@ -762,6 +776,11 @@ class RN440DAO
                 foreach ($arrayEvaluators['directors'] as $admin){
                     $obj = $this->entityManager->find(Admin::class, $admin);
                     $evaluation->addEvaluatorAdmin($obj);
+                }
+
+                foreach ($listObserver as $evaluator){
+                    $obj = $this->entityManager->find(Evaluator::class, $evaluator);
+                    $evaluation->addEvaluatorObserver($obj);
                 }
             }
 

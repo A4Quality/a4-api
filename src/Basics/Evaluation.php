@@ -117,7 +117,6 @@ class Evaluation
      */
     private $company;
 
-
     /**
      * Muitas avaliações tem muitos avaliadores.
      * @ManyToMany(targetEntity="Evaluator")
@@ -128,6 +127,17 @@ class Evaluation
      * )
      */
     private $evaluator;
+
+    /**
+     * Muitas avaliações tem muitos avaliadores observadores.
+     * @ManyToMany(targetEntity="Evaluator")
+     * @JoinTable(
+     *      name="evaluation_observer_evaluators",
+     *      joinColumns={@JoinColumn(name="id_evaluation", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="id_evaluator", referencedColumnName="id", unique=false)}
+     * )
+     */
+    private $evaluatorObserver;
 
     /**
      * Muitas Avaliações tem muitos avaliadores admins.
@@ -716,6 +726,44 @@ class Evaluation
     public function removeEvaluator($evaluator)
     {
         $this->evaluator->removeElement($evaluator);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvaluatorObserver()
+    {
+        return $this->evaluatorObserver;
+    }
+
+    /**
+     * @param mixed $evaluatorObserver
+     * @return Evaluation
+     */
+    public function setEvaluatorObserver($evaluatorObserver)
+    {
+        $this->evaluatorObserver = $evaluatorObserver;
+        return $this;
+    }
+
+    /**
+     * @param mixed $evaluator
+     * @return Evaluation
+     */
+    public function addEvaluatorObserver($evaluator)
+    {
+        $this->evaluatorObserver->add($evaluator);
+        return $this;
+    }
+
+    /**
+     * @param mixed $evaluator
+     * @return Evaluation
+     */
+    public function removeEvaluatorObserver($evaluator)
+    {
+        $this->evaluatorObserver->removeElement($evaluator);
         return $this;
     }
 
