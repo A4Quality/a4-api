@@ -424,6 +424,8 @@ class RN452DAO
                             rn.type = ".RN452::TYPE_ACCREDITATION." and
                             ev.id_company = ".$evaluation->getCompany()->getId().";";
 
+
+
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $res = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -431,7 +433,7 @@ class RN452DAO
         $id = $res[count($res) - 1];
 
         $acc_rn452 = new RN452();
-        $acc_rn452->setId($id);
+        $acc_rn452->setId($id->id);
 
         if ($returnOnlyId) return $id->id;
 
