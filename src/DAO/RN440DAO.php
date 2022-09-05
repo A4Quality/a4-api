@@ -212,11 +212,24 @@ class RN440DAO
                             break;
                         case Account::GROUP_EVALUATOR:
                             $evaluatorObj = $item->getEvaluation()->getEvaluator();
+                            $hasAdd = false;
                             foreach ($evaluatorObj as $itemEvaluator) {
-                                if ($itemEvaluator->getId() === $id) {
+                                if ($itemEvaluator->getId() === $id && !$hasAdd) {
                                     array_push($temp, $array);
+                                    $hasAdd = true;
                                 }
                             }
+
+                            // Verificar se é um obs
+                            if (!$hasAdd) {
+                                $evaluatorObsObj = $item->getEvaluation()->getEvaluatorObserver();
+                                foreach ($evaluatorObsObj as $itemEvaluatorObs) {
+                                    if ($itemEvaluatorObs->getId() === $id) {
+                                        array_push($temp, $array);
+                                    }
+                                }
+                            }
+                            
                             break;
                     }
                 }
