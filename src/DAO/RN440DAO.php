@@ -393,7 +393,7 @@ class RN440DAO
 
         $evaluation =  $rn440->getEvaluation();
         $lastDay = $evaluation->getCreatedDate()->format("Y-m-d H:i:s");
-        $firstDay = date("Y-m-d H:i:s", strtotime($lastDay . ' -1 year'));
+        $firstDay = date("Y-m-d H:i:s", strtotime($lastDay . ' -2 year'));
 
         $conn = Database::conexao();
         $sql = "SELECT rn.id as id from evaluations ev
@@ -435,7 +435,7 @@ class RN440DAO
 
         $evaluation =  $rn440->getEvaluation();
         $lastDay = $evaluation->getCreatedDate()->format("Y-m-d H:i:s");
-        $firstDay = date("Y-m-d H:i:s", strtotime($lastDay . ' -1 year'));
+        $firstDay = date("Y-m-d H:i:s", strtotime($lastDay . ' -2 year'));
 
         $conn = Database::conexao();
         $sql = "SELECT rn.id as id from evaluations ev
